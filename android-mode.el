@@ -409,6 +409,22 @@ activity in the 'launcher' category."
 (android-defun-ant-task "installd")
 (android-defun-ant-task "uninstall")
 
+(defun android-ndk (command)
+  "Run ndk command in the project root directory."
+  (android-in-root
+   (compile (concat "ndk-" command))))
+
+(defmacro android-defun-ndk-command (command)
+  `(defun ,(intern (concat "android-ndk-"
+                           (replace-regexp-in-string "[[:space:]]" "-" command)))
+     ()
+     ,(concat "Run 'ndk " command "' in the project root directory.")
+     (interactive)
+     (android-ndk ,command)))
+
+(android-defun-ndk-command "build")
+(android-defun-ndk-command "build clean")
+
 (defconst android-mode-keys
   '(("d" . android-start-ddms)
     ("e" . android-start-emulator)
